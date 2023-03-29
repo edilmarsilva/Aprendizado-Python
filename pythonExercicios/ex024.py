@@ -1,0 +1,15 @@
+"""Crie um programa que leia o nome de uma cidade diga se ela começa ou não com o nome “SANTO”."""
+print('\033[36m-=' * 30)
+print('\033[31mPROCURANDO UM NOME ESPECÍFICO EM UMA POSIÇÃO ESPECÍFICA')
+print('\033[36m-=' * 30)
+print('\033[31mUSANDO SPLIT P/ LISTAR E PEGAR A PRIMEIRA POSIÇÃO DA LISTA')
+
+cid = str(input('\033[1;34mEm que cidade você nasceu? ')).split()
+print('\033[36m=\033[m' * 60)
+print('SANTO' in cid[0].upper())
+print('\033[36m=\033[m' * 60)
+print('\033[31mUSANDO STRIP P/ REMOVER OS PRIMEIROS ESPAÇOS E ANALISAR AS PRIMEIRAS POSIÇÕES')
+cid = str(input('\033[1;34mEm que cidade você nasceu? ')).strip()
+print('\033[36m=\033[m' * 60)
+print(cid[:5].upper() == 'SANTO')
+print('\033[36m=\033[m' * 60)

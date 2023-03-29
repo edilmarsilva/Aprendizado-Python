@@ -1,0 +1,37 @@
+<Tol>:
+    orientation: 'vertical'
+    padding: 20
+    Label:
+        text: 'TOLERÂNCIA'
+        font_size: 20
+        text_size: self.size
+    BoxLayout:
+        Label:
+            text: 'MEDIDA FINAL'
+        Label:
+            text:  'TOLERÂNCIA'
+    BoxLayout:
+        spacing: 10
+        TextInput:
+            id: medida
+            multline: False
+            input_filter: 'float'
+        TextInput:
+            id: tolerancia
+            multline: False
+            input_filter: 'float'
+        Label:
+            id: resultado
+            font_size: 20
+    BoxLayout:
+        spacing: 10
+        Label:
+            text: 'MEDIDA FINAL'
+            font_size: 20
+        Label:
+            id: mf
+            font_size: 20
+    Button:
+        text: 'CHECAR'
+        on_release: root.calc()
+

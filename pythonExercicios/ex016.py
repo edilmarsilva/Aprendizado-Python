@@ -1,0 +1,21 @@
+"""Crie um programa que leia um número Real qualquer pelo teclado e mostre na tela a sua porção Inteira."""
+print('\033[31mIMPORTANDO APENAS UMA FUNÇÃO DA BIBLIOTECA MATH')
+print('\033[36m-=' * 20)
+print('\033[31m EXIBINDO PORÇÃO INTEIRA DE UM NÚMERO')
+print('\033[36m-=' * 20)
+from math import trunc
+n = float(input('\033[1;34mDigite um valor: '))
+print('\033[36m=\033[m' * 60)
+print('\033[1mO valor digitado foi {} e sua porção inteira é {}'.format(n, trunc(n)))
+print('\033[36m=\033[m' * 60)
+print('\033[31mOutra forma importando apenas uma das funções do módulo')
+import math
+n = float(input('\033[1;34mDigite um valor: '))
+print('\033[36m=\033[m' * 60)
+print('\033[1mO valor digitado foi {} e sua porção inteira é {}'.format(n, math.trunc(n)))
+print('\033[36m=\033[m' * 60)
+print('\033[31mCom funções nativas do PYTHON')
+n = float(input('\033[1;34mDigite um valor: '))
+print('\033[36m=\033[m' * 60)
+print('\033[1mO valor digitado foi {} e sua porção inteira é {}'.format(n, int(n)))
+print('\033[36m=\033[m' * 60)

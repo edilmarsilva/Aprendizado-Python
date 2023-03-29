@@ -1,0 +1,11 @@
+"""Faça um algoritmo que leia o salário de um funcionário e mostre o seu novo salário, com 15% de aumento."""
+print('\033[36m-=' * 20)
+print('\033[31m         AUMENTO SALARIAL')
+print('\033[36m-=' * 20)
+func = input('\033[1;34mDigite o nome do funcionário: ')
+sal = float(input('Digite seu salário atual: R$ '))
+aum = float(input('Digite a porcentagem de aumento salarial: '))
+nsal = sal + (sal * aum / 100)
+print('\033[36m#\033[m'*110)
+print('\033[1mO funcionário {} recebe atualmente R$ {:.2f} e após o aumento de {:.2f}% passará à receber R$ {:.2f}'.format(func, sal, aum, nsal))
+print('\033[36m#\033[m'*110)

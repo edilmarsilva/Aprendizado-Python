@@ -1,0 +1,22 @@
+"""Faça um programa que tenha uma função chamada escreva(),
+que receba um texto qualquer como parâmetro e mostre uma mensagem
+com tamanho adaptável. Ex: escreva(‘Olá, Mundo!’) Saída:
+~~~
+Olá, Mundo!
+~~~"""
+def titulo(txt):
+    print('\033[35m-*\033[m' * 25)
+    print(f'\033[1;34m{txt:^50}')
+    print('\033[35m-*\033[m' * 25)
+
+def escreva(msg):
+    tam = len(msg) + 4
+    print('=' * tam)
+    print(f'  {msg}')
+    print('=' * tam)
+
+
+#Programa Principal
+titulo('Um print especial')
+escreva('Curso em Vídeo')
+escreva('Eu Vou Conseguir')
