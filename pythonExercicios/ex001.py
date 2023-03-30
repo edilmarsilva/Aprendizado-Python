@@ -2,3 +2,4 @@
 
 print('\033[4;31mOLÁ MUNDO\033[0;36m !!!')
 print('O Eliezer está assistindo')
+print('O Eliezer está assistindo 2')
