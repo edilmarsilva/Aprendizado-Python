@@ -3,25 +3,6 @@
 -De 26 à 40 horas 60%
 -De 41 à 60 horas 80%"""
 
-
-#def horaextra (horas):
-#    if horas < 25:
-#        return horas
-#    if horas > 25.01 and horas < 40:
-#        hora60 = horas - 25
-#        return hora60
-#    if horas > 40.01 and horas < 60:
-#        hora80 = horas - 40
-#        return hora80
-
-
-
-
-
-
-
-
-
 #Programa principal
 
 def titulo(txt):
