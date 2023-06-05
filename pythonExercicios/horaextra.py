@@ -53,3 +53,5 @@ if horas ==0:
     print(f'Vamos parar de preguiça e vir fazer hora extra!')
 if horas <0:
     print('Tá de brinqueixon whith me?')
+
+print("MOSTRANDO PRO AMÓS O GIT")
