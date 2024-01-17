@@ -25,7 +25,7 @@ sleep(10)
 
 # Abrir SIAP 2 opção 6 e CONFIRMAR
 pyautogui.press('6')
-sleep(50)
+sleep(55)
 
 # Sair do EB
 pyautogui.press('esc')
@@ -58,7 +58,7 @@ sleep(4)
 pyautogui.doubleClick(x=34, y=195)
 sleep(2)
 # IR até FTP
-pyautogui.doubleClick(x=44, y=352)
+pyautogui.doubleClick(x=48, y=401)
 sleep(2)
 
 # Abrir o ASBYTE
