@@ -1,11 +1,13 @@
 import pyautogui
 from time import sleep
 
-# Abrir o EB
 pyautogui.PAUSE = 1
 pyautogui.alert('CONFIRMA ATUALIZAÇÃO AUTOMÁTICA?')
 
+# Chamar área de trabalho
 pyautogui.hotkey('winleft', 'd')
+
+# Abrir o EB
 pyautogui.doubleClick(x=1315, y=44)
 sleep(1.5)
 
@@ -59,12 +61,20 @@ sleep(2)
 pyautogui.doubleClick(x=44, y=352)
 sleep(2)
 
-# Abrir o ASBYTE / Logon / Usuarios
-pyautogui.doubleClick(x=711, y=215)
+# Abrir o ASBYTE
+pyautogui.doubleClick(x=718, y=216)
 sleep(3)
-pyautogui.doubleClick(x=724, y=319)
+
+# Abrir public_html
+pyautogui.doubleClick(x=718, y=232)
 sleep(3)
-pyautogui.doubleClick(x=729, y=250)
+
+# Abrir logon
+pyautogui.doubleClick(x=722, y=317)
+sleep(3)
+
+# Abrir usuários
+pyautogui.doubleClick(x=713, y=248)
 sleep(3)
 
 # Selecionar todos arquivos
@@ -77,6 +87,7 @@ pyautogui.click(x=657, y=384)
 # Sobrescrever ALL
 pyautogui.click(x=617, y=428)
 sleep(16)
+
 # Sair do FTP
 pyautogui.click(x=1316, y=64)
 pyautogui.click(x=682, y=442)
