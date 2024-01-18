@@ -1,6 +1,3 @@
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-
 def h11(medida):
     if 1 <= medida < 3:
         medida_final = medida - 0.06
@@ -174,10 +171,10 @@ def leiaFloat(msg):
 
 #Programa Principal
 
-class Tol(BoxLayout):
-    def calc(self):
-        medida = float(self.ids.medida.text)
-        bitola = leiaFloat(medida)
+#class Tol(BoxLayout):
+#    def calc(self):
+#        medida = float(self.ids.medida.text)
+#        bitola = leiaFloat(medida)
 
 
 
@@ -186,9 +183,9 @@ class Tol(BoxLayout):
 
 
 
-class Tolerancia(App):
-    def build(self):
-        return Tol()
+#class Tolerancia(App):
+#    def build(self):
+#        return Tol()
 
-Tolerancia().run()
+#Tolerancia().run()
 

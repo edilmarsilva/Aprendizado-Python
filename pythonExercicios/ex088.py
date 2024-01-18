@@ -28,6 +28,6 @@ print(f'\033[1;36m{f"SORTEANDO {resp} JOGOS":^50}\033[m')
 for c in range(0, len(palpites)):
     palpites[c].sort()
     print(f'\033[1mJOGO {c + 1}: {palpites[c]}')
-    sleep(3.5)
+    sleep(1.0)
 print(f'\033[1;32m{"BOA SORTE":^50}')
 print('\033[1;35m-=\033[m' * 25)
