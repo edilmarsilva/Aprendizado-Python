@@ -64,4 +64,3 @@ elif escolha == 3 and computador == 2:
     print('JOGADOR VENCEU !!!')
 elif escolha == 3 and computador == 3:
     print('EMPATOU')
-
