@@ -51,43 +51,40 @@ pyautogui.hotkey('winleft', 'd')
 
 
 
-# 2 clics no SIAP PARTE 4
-pyautogui.doubleClick(x=1313, y=234)
-sleep(4)
-# Abrir o C:
-pyautogui.doubleClick(x=34, y=195)
-sleep(2)
-# IR até FTP
-pyautogui.doubleClick(x=48, y=401)
-sleep(2)
+# 2 clics no SIAP PARTE 4 (FileZilla)
+pyautogui.doubleClick(x=1316, y=230)
+sleep(0.5)
+# Abrir o Conexão rápida:
+pyautogui.click(x=756, y=86)
+sleep(0.5)
+# Selecionar o embo1:
+pyautogui.click(x=860, y=150)
+sleep(0.5)
+pyautogui.press('enter')
 
-# Abrir o ASBYTE
-pyautogui.doubleClick(x=718, y=216)
-sleep(3)
-
-# Abrir public_html
-pyautogui.doubleClick(x=718, y=232)
-sleep(3)
-
-# Abrir logon
-pyautogui.doubleClick(x=722, y=317)
-sleep(3)
-
-# Abrir usuários
-pyautogui.doubleClick(x=713, y=248)
-sleep(3)
+# Abrir o public_hyml / Logon / Usuarios
+pyautogui.doubleClick(x=778, y=289)
+sleep(0.5)
+pyautogui.doubleClick(x=773, y=379)
+sleep(0.5)
+pyautogui.doubleClick(x=803, y=379)
+sleep(0.5)
 
 # Selecionar todos arquivos
-pyautogui.click(x=218, y=356)
+pyautogui.click(x=91, y=395)
 pyautogui.hotkey('ctrl', 'a')
 
-# Passar para direita
-pyautogui.click(x=657, y=384)
+# Clicar com botão direito do mouse
+pyautogui.rightClick(x=65, y=395)
 
-# Sobrescrever ALL
-pyautogui.click(x=617, y=428)
-sleep(16)
-
+# Selecionar UPLOAD
+pyautogui.click(x=136, y=406)
+sleep(0.5)
+pyautogui.click(x=629, y=441)
+sleep(0.5)
+pyautogui.click(x=629, y=463)
+sleep(0.5)
+pyautogui.click(x=925, y=494)
+sleep(35)
 # Sair do FTP
-pyautogui.click(x=1316, y=64)
-pyautogui.click(x=682, y=442)
+pyautogui.click(x=1339, y=4)
