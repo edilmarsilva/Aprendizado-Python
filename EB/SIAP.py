@@ -25,7 +25,7 @@ sleep(10)
 
 # Abrir SIAP 2 opção 6 e CONFIRMAR
 pyautogui.press('6')
-sleep(55)
+sleep(70)
 
 # Sair do EB
 pyautogui.press('esc')
@@ -53,22 +53,23 @@ pyautogui.hotkey('winleft', 'd')
 
 # 2 clics no SIAP PARTE 4 (FileZilla)
 pyautogui.doubleClick(x=1316, y=230)
-sleep(0.5)
+sleep(3.0)
 # Abrir o Conexão rápida:
 pyautogui.click(x=756, y=86)
-sleep(0.5)
+sleep(1.0)
 # Selecionar o embo1:
 pyautogui.click(x=860, y=150)
-sleep(0.5)
+sleep(3.5)
 pyautogui.press('enter')
+sleep(3.0)
 
 # Abrir o public_hyml / Logon / Usuarios
 pyautogui.doubleClick(x=778, y=289)
-sleep(0.5)
+sleep(1.5)
 pyautogui.doubleClick(x=773, y=379)
-sleep(0.5)
+sleep(1.5)
 pyautogui.doubleClick(x=803, y=379)
-sleep(0.5)
+sleep(1.5)
 
 # Selecionar todos arquivos
 pyautogui.click(x=91, y=395)
@@ -85,6 +86,13 @@ sleep(0.5)
 pyautogui.click(x=787, y=464)
 sleep(0.5)
 pyautogui.click(x=1086, y=496)
+
+pyautogui.click(x=630, y=443)
+sleep(0.5)
+pyautogui.click(x=628, y=463)
+sleep(0.5)
+pyautogui.click(x=926, y=497)
+
 sleep(35)
 # Sair do FTP
 pyautogui.click(x=1339, y=4)
