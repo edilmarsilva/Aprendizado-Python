@@ -44,7 +44,7 @@ sleep(1)
 pyautogui.press('enter')
 sleep(1)
 pyautogui.press('enter')
-sleep(3)
+sleep(6)
 pyautogui.press('enter')
 
 pyautogui.hotkey('winleft', 'd')
