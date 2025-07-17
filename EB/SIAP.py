@@ -19,13 +19,13 @@ pyautogui.press('8')
 
 # Abrir SIAP 1 opção 5 e CONFIRMAR
 pyautogui.press('5')
-sleep(1)
+sleep(6)
 pyautogui.press('enter')
-sleep(10)
+sleep(30)
 
 # Abrir SIAP 2 opção 6 e CONFIRMAR
 pyautogui.press('6')
-sleep(70)
+sleep(100)
 
 # Sair do EB
 pyautogui.press('esc')
@@ -40,11 +40,11 @@ pyautogui.hotkey('winleft', 'd')
 pyautogui.doubleClick(x=1311, y=129)
 sleep(2)
 pyautogui.press('enter')
-sleep(1)
+sleep(2)
 pyautogui.press('enter')
-sleep(1)
+sleep(2)
 pyautogui.press('enter')
-sleep(6)
+sleep(8)
 pyautogui.press('enter')
 
 pyautogui.hotkey('winleft', 'd')
@@ -65,11 +65,11 @@ sleep(3.0)
 
 # Abrir o public_hyml / Logon / Usuarios
 pyautogui.doubleClick(x=778, y=289)
-sleep(1.5)
+sleep(2)
 pyautogui.doubleClick(x=773, y=379)
-sleep(1.5)
+sleep(2)
 pyautogui.doubleClick(x=803, y=379)
-sleep(1.5)
+sleep(2)
 
 # Selecionar todos arquivos
 pyautogui.click(x=91, y=395)
@@ -93,6 +93,6 @@ pyautogui.click(x=628, y=463)
 sleep(0.5)
 pyautogui.click(x=926, y=497)
 
-sleep(35)
+sleep(30)
 # Sair do FTP
 pyautogui.click(x=1339, y=4)
