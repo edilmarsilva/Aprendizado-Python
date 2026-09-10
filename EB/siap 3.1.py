@@ -549,69 +549,50 @@ tbody tr:hover td {{ background: #f3fff4; }}
 </div>
 
 <script>
-const pesquisa = document.querySelector("#pesquisa");
-const filtroStatus = document.querySelector("#filtroStatus");
-const linhas = [...document.querySelectorAll("#tabela tbody tr")];
-const estoqueOriginal = {totais["estoque"]};
-const processoOriginal = {totais["processo"]};
-
-function formatarKg(valor) {{
-    return Math.round(valor).toLocaleString("pt-BR") + " KG";
-}}
-
-function obterLinhasVisiveis() {{
-    return linhas.filter(linha => !linha.hidden);
-}}
+const pesquisa = document.querySelector('#pesquisa');
+const filtroStatus = document.querySelector('#filtroStatus');
+const linhas = [...document.querySelectorAll('#tabela tbody tr')];
 
 function atualizarResumo() {{
-    const visiveis = obterLinhasVisiveis();
-    const possuiFiltro = pesquisa.value.trim() !== "" || filtroStatus.value !== "";
+    const visiveis = linhas.filter(l => !l.hidden);
+    let totalEstoque = 0;
+    let totalProcesso = 0;
 
-    let estoque = 0;
-    let processo = 0;
-
-    visiveis.forEach(linha => {{
-        estoque += Number(linha.dataset.qtde || 0);
-        processo += Number(linha.dataset.emProd || 0);
+    visiveis.forEach(l => {{
+        totalEstoque += Number(l.dataset.qtde || 0);
+        totalProcesso += Number(l.dataset.emProd || 0);
     }});
 
-    document.querySelector("#totalEstoque").textContent =
-        formatarKg(possuiFiltro ? estoque : estoqueOriginal);
-
-    document.querySelector("#totalProcesso").textContent =
-        formatarKg(possuiFiltro ? processo : processoOriginal);
+    document.querySelector('#totalEstoque').textContent = Math.round(totalEstoque).toLocaleString('pt-BR') + ' KG';
+    document.querySelector('#totalProcesso').textContent = Math.round(totalProcesso).toLocaleString('pt-BR') + ' KG';
 }}
 
 function aplicarFiltros() {{
     const texto = pesquisa.value.toLowerCase().trim();
-    const statusSelecionado = filtroStatus.value;
-    let quantidade = 0;
+    const status = filtroStatus.value;
+    let contador = 0;
 
-    linhas.forEach(linha => {{
-        const textoLinha = linha.innerText.toLowerCase();
-        const statusLinha = linha.dataset.status || "";
-        const aguardandoOrdem = linha.dataset.aguardando === "true";
-        const passouTexto = !texto || textoLinha.includes(texto);
+    linhas.forEach(l => {{
+        const textoLinha = l.innerText.toLowerCase();
+        const statusLinha = l.dataset.status || "";
+        const aguardando = l.dataset.aguardando === "true";
 
-        let passouStatus = true;
+        let passaStatus = !status;
 
-        if (statusSelecionado === "AGUARDANDO_ORDEM") {{
-            passouStatus = aguardandoOrdem;
-        }} else if (statusSelecionado) {{
-            passouStatus = statusLinha === statusSelecionado;
+        if (status === "AGUARDANDO_ORDEM") {{
+            passaStatus = aguardando;
+        }} else if (status) {{
+            passaStatus = statusLinha === status;
         }}
 
-        const mostrar = passouTexto && passouStatus;
-        linha.hidden = !mostrar;
+        const passaTexto = !texto || textoLinha.includes(texto);
+        const mostrar = passaTexto && passaStatus;
 
-        if (mostrar) {{
-            quantidade++;
-        }}
+        l.hidden = !mostrar;
+        if (mostrar) contador++;
     }});
 
-    document.querySelector("#contador").textContent =
-        quantidade + " registro(s) exibido(s)";
-
+    document.querySelector('#contador').textContent = contador + " registro(s) exibido(s)";
     atualizarResumo();
 }}
 
@@ -621,41 +602,36 @@ function limparFiltros() {{
     aplicarFiltros();
 }}
 
-pesquisa.addEventListener("input", aplicarFiltros);
-filtroStatus.addEventListener("change", aplicarFiltros);
+pesquisa.addEventListener('input', aplicarFiltros);
+filtroStatus.addEventListener('change', aplicarFiltros);
 
-function ordenarTabela(indice) {{
-    const tbody = document.querySelector("#tabela tbody");
-    const ordemAtual = tbody.dataset.ordem || "desc";
-    const novaOrdem = ordemAtual === "asc" ? "desc" : "asc";
-    tbody.dataset.ordem = novaOrdem;
+document.querySelectorAll('#tabela thead th').forEach((th, i) => {{
+    th.addEventListener('click', () => {{
+        const tbody = document.querySelector('#tabela tbody');
+        const ordem = tbody.dataset.ordem === "asc" ? "desc" : "asc";
+        tbody.dataset.ordem = ordem;
 
-    const ordenadas = [...linhas].sort((a, b) => {{
-        const valorA = a.cells[indice].innerText.trim();
-        const valorB = b.cells[indice].innerText.trim();
-        const comparacao = valorA.localeCompare(valorB, "pt-BR", {{ numeric: true, sensitivity: "base" }});
-        return novaOrdem === "asc" ? comparacao : -comparacao;
+        const ordenadas = [...linhas].sort((a, b) => {{
+            const va = a.cells[i].innerText.trim();
+            const vb = b.cells[i].innerText.trim();
+            const cmp = va.localeCompare(vb, "pt-BR", {{ numeric: true, sensitivity: "base" }});
+            return ordem === "asc" ? cmp : -cmp;
+        }});
+
+        ordenadas.forEach(l => tbody.appendChild(l));
     }});
-
-    ordenadas.forEach(linha => tbody.appendChild(linha));
-}}
-
-document.querySelectorAll("#tabela thead th").forEach((cabecalho, indice) => {{
-    cabecalho.addEventListener("click", () => ordenarTabela(indice));
 }});
 
-function escaparCSV(valor) {{
-    return '"' + valor.replaceAll('"', '""') + '"';
-}}
+function escapeCSV(v) {{ return '"' + v.replaceAll('"', '""') + '"'; }}
 
 function exportarCSV() {{
-    const visiveis = obterLinhasVisiveis();
-    const cabecalhos = [...document.querySelectorAll("#tabela thead th")].map(c => c.innerText.trim());
-    const dados = visiveis.map(linha => [...linha.cells].map(c => c.innerText.trim()));
-    const conteudo = [cabecalhos, ...dados].map(l => l.map(escaparCSV).join(";")).join("\\n");
-    const arquivo = new Blob(["\\ufeff" + conteudo], {{ type: "text/csv;charset=utf-8" }});
+    const visiveis = linhas.filter(l => !l.hidden);
+    const cabecalhos = [...document.querySelectorAll('#tabela thead th')].map(th => th.innerText.trim());
+    const dados = visiveis.map(l => [...l.cells].map(c => c.innerText.trim()));
+    const conteudo = [cabecalhos, ...dados].map(l => l.map(escapeCSV).join(";")).join("\\n");
+    const blob = new Blob(["\\ufeff" + conteudo], {{ type: "text/csv;charset=utf-8" }});
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(arquivo);
+    link.href = URL.createObjectURL(blob);
     link.download = "{escape(titulo)}.csv";
     link.click();
     URL.revokeObjectURL(link.href);
@@ -664,8 +640,7 @@ function exportarCSV() {{
 atualizarResumo();
 </script>
 </body>
-</html>
-"""
+</html>"""
 
 
 def processar_arquivo_estoque(caminho_origem, caminho_destino, titulo):
@@ -757,6 +732,125 @@ def extrair_registros_producao(html_bruto):
         if len(celulas) < 14:
             celulas = tr.find_all(["th", "td"], recursive=True)
 
+        # Se ainda não houver células suficientes, pula esta linha.
+        if len(celulas) < 14: # Mantido 14 como um limite mínimo razoável
+            continue
+
+        def texto_da_celula(celula):
+            """
+            Extrai apenas o texto da célula.
+            Imagens não substituem o conteúdo textual.
+            """
+            return limpar_texto(celula.get_text(" ", strip=True))
+
+        valores_extraidos = [texto_da_celula(celula) for celula in celulas]
+
+        # A primeira coluna precisa ser a Ordem de Produção.
+        # Verifica se o primeiro valor é um número de ordem de produção válido.
+        primeiro_texto = normalizar_texto(valores_extraidos[0])
+        primeiro_sem_espacos = re.sub(r"\s+", "", primeiro_texto)
+
+        if not re.fullmatch(r"\d{5,}", primeiro_sem_espacos):
+            continue
+
+        # Procura o status somente pelas imagens da linha.
+        status_txt = ""
+        status_cls = ""
+
+        for img in tr.find_all("img"):
+            status_txt, status_cls = status_da_imagem(
+                img.get("src", "")
+            )
+
+            if status_txt:
+                break
+
+        # Garante que temos exatamente 15 posições para desempacotar,
+        # preenchendo com strings vazias se houver menos, ou agrupando
+        # o excesso na observação se houver mais.
+        valores = valores_extraidos[:] # Copia para não modificar a lista original
+
+        # Se houver mais de 15 células, as excedentes pertencem
+        # ao conteúdo final da observação.
+        if len(valores) > 15:
+            observacao_extra = " ".join(
+                valor for valor in valores[14:] if valor
+            )
+            valores = valores[:14] + [observacao_extra]
+        # Garante pelo menos 15 posições, conforme HEADERS_PRODUCAO.
+        while len(valores) < 15:
+            valores.append("")
+
+        (
+            o_pr,
+            lote,
+            pf_l,
+            bit_l,
+            aco, # <-- AQUI ESTÁ A COLUNA AÇO
+            pf,
+            ac,
+            bit_,
+            tol,
+            cliente,
+            qtde,
+            prazo,
+            pcp,
+            status_coluna,
+            observacoes,
+        ) = valores[:15]
+
+        # Apenas limpa o texto, sem tentar separar.
+        # O valor de 'aco' já deve ser o conteúdo da 5ª célula.
+        aco = limpar_texto(aco)
+
+        # A quantidade pode vir como 1.234,56 ou 1234.
+        qtde_limpa = limpar_texto(qtde)
+        qtde_numero = re.sub(r"[^\d]", "", qtde_limpa)
+        qtde_num = int(qtde_numero) if qtde_numero else 0
+
+        # O status visual encontrado na imagem tem prioridade.
+        # Se não houver imagem, aproveita o texto da coluna Status.
+        if not status_txt and status_coluna:
+            status_txt = limpar_texto(status_coluna)
+            status_cls = ""
+
+        registros.append({
+            "O.Pr.": o_pr,
+            "Lote": lote,
+            "Pf.L": pf_l,
+            "Bit.L": bit_l,
+            "Aço": aco,
+            "Pf": pf,
+            "Ac": ac,
+            "Bit.": bit_,
+            "Tol.": tol,
+            "Cliente": cliente,
+            "Qtde": qtde,
+            "Prazo Dado": prazo,
+
+            # Conforme o padrão solicitado:
+            # PCP fica vazio.
+            "P.C.P": "",
+
+            "Status": status_txt,
+            "StatusClasse": status_cls,
+            "Observações": observacoes,
+            "QtdeNum": qtde_num,
+        })
+
+    print(f"   Registros aproveitados: {len(registros)}")
+
+    return registros
+
+
+    for tr in linhas_tr:
+        # Primeiro tenta somente as células diretas da linha.
+        celulas = tr.find_all(["th", "td"], recursive=False)
+
+        # Fallback para alguns HTML antigos que possuem <td> aninhado.
+        if len(celulas) < 14:
+            celulas = tr.find_all(["th", "td"], recursive=True)
+
         if len(celulas) < 14:
             continue
 
@@ -820,20 +914,15 @@ def extrair_registros_producao(html_bruto):
             observacoes,
         ) = valores[:15]
 
-        # Correção específica da coluna Aço:
-        # mantém somente o conteúdo da quinta célula.
+        # Correção da coluna Aço:
+        # Quando o HTML vem malformado, a quinta célula pode conter
+        # também os valores das colunas seguintes.
+        # Neste relatório, o valor do aço é o primeiro item da célula.
+
         aco = limpar_texto(aco)
 
-        # Caso o HTML tenha colocado várias informações dentro da
-        # célula Aço, pega somente o primeiro valor antes da próxima
-        # sequência de campos claramente identificável.
         if aco:
-            aco = re.split(
-                r"\s+(?=\d+(?:[,.]\d+)?\s*(?:KG|MM|CM)?\b)",
-                aco,
-                maxsplit=1,
-                flags=re.IGNORECASE,
-            )[0].strip()
+            aco = aco.split(maxsplit=1)[0].strip()
 
         # A quantidade pode vir como 1.234,56 ou 1234.
         qtde_limpa = limpar_texto(qtde)
@@ -873,7 +962,6 @@ def extrair_registros_producao(html_bruto):
     print(f"   Registros aproveitados: {len(registros)}")
 
     return registros
-
 
 def gerar_linha_producao(r):
     status_html = (
@@ -1128,7 +1216,6 @@ def processar():
         for nome, titulo in ARQUIVOS_ESTOQUE.items()
     }
 
-    # Identifica quais .htm da pasta correspondem aos 3 nomes de estoque
     arquivos_estoque_encontrados = {}
 
     for arquivo in todos_htm:
@@ -1143,7 +1230,6 @@ def processar():
     copiados = 0
     erros = 0
 
-    # ---------------- 1) Processa os 3 exclusivos de ESTOQUE ----------------
     print()
     print("=" * 80)
     print("ETAPA 1 — TRATAMENTO EXCLUSIVO DE ESTOQUE (ignorando os demais .htm por enquanto)")
@@ -1173,7 +1259,6 @@ def processar():
             print()
             print(f"❌ Erro ao processar (estoque) {arquivo_origem.name}: {erro}")
 
-    # ---------------- 2) Processa os demais .htm como PRODUÇÃO ----------------
     print()
     print("=" * 80)
     print("ETAPA 2 — TRATAMENTO DE PRODUÇÃO (todos os .htm, exceto os 3 de estoque)")
@@ -1198,7 +1283,6 @@ def processar():
             print()
             print(f"❌ Erro ao processar (produção) {arquivo.name}: {erro}")
 
-    # ---------------- 3) Copia intactos todos os arquivos não-.htm ----------------
     print()
     print("=" * 80)
     print("ETAPA 3 — CÓPIA DE ARQUIVOS NÃO-.HTM (INTACTOS)")
