@@ -410,10 +410,14 @@ body{{margin:0;background:#f4f7f5;font:15px Arial;color:#202820}}
 .controls button{{background:#176b28;color:white;cursor:pointer;border:none;font-weight:bold;padding:10px 20px}}
 .controls button:hover{{background:#135620}}
 .box{{overflow:hidden}}
+.controls-box{{position:sticky;top:0;z-index:1100;box-shadow:0 4px 18px #0002}}
 .scroll{{overflow-x:auto}}
-table{{width:100%;border-collapse:collapse;text-align:center}}
+table{{width:100%;min-width:1100px;border-collapse:collapse;text-align:center}}
 th,td{{padding:13px;border-bottom:1px solid #e1e6e2;white-space:nowrap;font-weight:bold}}
-th{{background:#eaffea;color:#155c22;cursor:pointer;position:sticky;top:0;font-weight:bold;line-height:1.15}}
+th{{background:#eaffea;color:#155c22;cursor:pointer;position:relative;font-weight:bold;line-height:1.15}}
+#stickyHeader{{display:none;position:fixed;top:0;z-index:1000;overflow:hidden;background:white;box-shadow:0 3px 10px #0002}}
+#stickyHeader table{{margin:0;border-collapse:collapse;table-layout:auto}}
+#stickyHeader th{{background:#eaffea;color:#155c22;cursor:pointer;white-space:nowrap}}
 tr:hover td{{background:#f4fff4}}
 .status{{padding:6px 12px;border-radius:20px;font-weight:bold;font-size:12px;display:inline-block}}
 .ok{{background:#dcfce7;color:#166534}}
@@ -439,7 +443,7 @@ tr:hover td{{background:#f4fff4}}
 <small>Listagem atualizada em {escape(data)}</small>
 </div>
 
-<div class="box" style="padding:14px;margin-bottom:14px">
+<div class="box controls-box" style="padding:14px;margin-bottom:14px">
 <div class="controls">
 <input id="q" placeholder="🔎 Pesquisar em todas as colunas">
 <select id="st">
@@ -458,7 +462,7 @@ tr:hover td{{background:#f4fff4}}
 </div>
 
 <div class="box">
-<div class="scroll">
+<div class="scroll" id="tableScroll">
 <table id="t">
 <thead><tr>{headers_html}</tr></thead>
 <tbody>
@@ -468,6 +472,7 @@ tr:hover td{{background:#f4fff4}}
 </div>
 <div style="padding:10px;color:#667" id="count">{len(registros)} registros exibidos</div>
 </div>
+<div id="stickyHeader" aria-hidden="true"></div>
 
 <div class="summary" id="summary">
 <div class="card"><small>Total em estoque</small><b id="total-estoque">{formatar_kg(totais['estoque'])}</b></div>
@@ -553,7 +558,53 @@ function csv() {{
     URL.revokeObjectURL(link.href);
 }}
 
+const tableScroll = document.getElementById("tableScroll");
+const table = document.getElementById("t");
+const stickyHeader = document.getElementById("stickyHeader");
+let stickyTable = null;
+
+function atualizarCabecalhoFixo() {{
+    if (!table || !tableScroll || !stickyHeader) return;
+    const tableRect = table.getBoundingClientRect();
+    const scrollRect = tableScroll.getBoundingClientRect();
+    const controls = document.querySelector('.controls-box');
+    const top = controls ? controls.getBoundingClientRect().bottom : 0;
+    const headerHeight = table.tHead ? table.tHead.getBoundingClientRect().height : 0;
+    const deveMostrar = tableRect.top < top && tableRect.bottom > top + headerHeight;
+    if (!deveMostrar) {{ stickyHeader.style.display = "none"; return; }}
+    if (!stickyTable) {{
+        stickyTable = table.cloneNode(false);
+        stickyTable.appendChild(table.tHead.cloneNode(true));
+        stickyTable.querySelectorAll("th").forEach((th, i) => {{
+            th.addEventListener("click", () => {{
+                const original = table.tHead.querySelectorAll("th")[i];
+                if (original) original.click();
+            }});
+        }});
+        stickyHeader.appendChild(stickyTable);
+    }}
+    stickyHeader.style.display = "block";
+    stickyHeader.style.top = top + "px";
+    stickyHeader.style.left = scrollRect.left + "px";
+    stickyHeader.style.width = scrollRect.width + "px";
+    stickyHeader.style.height = headerHeight + "px";
+    stickyTable.style.width = table.scrollWidth + "px";
+    stickyTable.style.transform = "translateX(" + (-tableScroll.scrollLeft) + "px)";
+    table.tHead.querySelectorAll("th").forEach((cell, i) => {{
+        const stickyCell = stickyTable.querySelectorAll("th")[i];
+        if (stickyCell) {{
+            const largura = cell.getBoundingClientRect().width;
+            stickyCell.style.width = largura + "px";
+            stickyCell.style.minWidth = largura + "px";
+        }}
+    }});
+}}
+window.addEventListener("scroll", atualizarCabecalhoFixo, {{ passive: true }});
+window.addEventListener("resize", atualizarCabecalhoFixo);
+tableScroll.addEventListener("scroll", atualizarCabecalhoFixo, {{ passive: true }});
+
 applyFilters();
+atualizarCabecalhoFixo();
 </script>
 </body>
 </html>"""
@@ -1007,6 +1058,7 @@ body{{margin:0;background:#f4f7f5;font:15px Arial;color:#202820}}
 .date-filter-group span{{font-size:12px;font-weight:bold;color:#176b28}}
 
 .box{{overflow:hidden}}
+.controls-box{{position:sticky;top:0;z-index:1100;box-shadow:0 4px 18px #0002}}
 .scroll{{overflow-x:auto}}
 table{{width:100%;min-width:1450px;border-collapse:collapse;text-align:center}}
 
@@ -1400,8 +1452,10 @@ function atualizarCabecalhoFixo() {{
     if (!table || !tableScroll || !stickyHeader) return;
     const tableRect = table.getBoundingClientRect();
     const scrollRect = tableScroll.getBoundingClientRect();
+    const controls = document.querySelector('.controls-box');
+    const top = controls ? controls.getBoundingClientRect().bottom : 0;
     const headerHeight = table.tHead ? table.tHead.getBoundingClientRect().height : 0;
-    const deveMostrar = tableRect.top < 0 && tableRect.bottom > headerHeight;
+    const deveMostrar = tableRect.top < top && tableRect.bottom > top + headerHeight;
     if (!deveMostrar) {{ stickyHeader.style.display = "none"; return; }}
     if (!stickyTable) {{
         stickyTable = table.cloneNode(false);
@@ -1415,6 +1469,7 @@ function atualizarCabecalhoFixo() {{
         stickyHeader.appendChild(stickyTable);
     }}
     stickyHeader.style.display = "block";
+    stickyHeader.style.top = top + "px";
     stickyHeader.style.left = scrollRect.left + "px";
     stickyHeader.style.width = scrollRect.width + "px";
     stickyHeader.style.height = headerHeight + "px";
@@ -1430,7 +1485,6 @@ function atualizarCabecalhoFixo() {{
         }}
     }});
 }}
-
 window.addEventListener("scroll", atualizarCabecalhoFixo, {{ passive: true }});
 window.addEventListener("resize", atualizarCabecalhoFixo);
 tableScroll.addEventListener("scroll", atualizarCabecalhoFixo, {{ passive: true }});
